@@ -1,0 +1,4 @@
+locations:
+- code_source:
+    module_name: orchestration.defs
+  location_name: orchestration
