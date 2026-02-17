@@ -1,0 +1,14 @@
+dbt_tushar:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: <YOUR_SNOWFLAKE_ACCOUNT>      # e.g. xy12345.ap-south-1
+      user: <YOUR_SNOWFLAKE_USER>
+      password: <YOUR_SNOWFLAKE_PASSWORD>
+      role: <YOUR_SNOWFLAKE_ROLE>
+      warehouse: DEMO_WH
+      database: DEMO_DAGSTER
+      schema: DBT_TUSHAR
+      threads: 4
+      client_session_keep_alive: False
