@@ -1,0 +1,16 @@
+[project]
+name = "dagster_dbt_sales_demo"
+version = "0.1.0"
+description = "Dagster partitioning demo for daily sales with dbt + Snowflake"
+requires-python = ">=3.10"
+dependencies = [
+  "dagster",
+  "dagster-webserver",
+  "dagster-dbt",
+  "dbt-snowflake",
+  "snowflake-connector-python",
+]
+
+[tool.dagster]
+module_name = "orchestration.defs"
+code_location_name = "orchestration"
