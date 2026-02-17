@@ -1,4 +1,4 @@
-from dagster import Definitions, DailyPartitionsDefinition, asset
+from dagster import Definitions, DailyPartitionsDefinition, asset, Output
 from .resources import dbt_cli
 
 daily_partitions = DailyPartitionsDefinition(start_date="2026-02-15")
@@ -11,7 +11,6 @@ def fct_daily_sales_partitioned(context):
 
     context.log.info(f"Running dbt for window {min_date} -> {max_date}")
 
-    # dbt expects vars as a YAML/JSON-like string
     vars_arg = f'{{min_date: "{min_date}", max_date: "{max_date}"}}'
 
     cli_args = [
@@ -24,8 +23,11 @@ def fct_daily_sales_partitioned(context):
         vars_arg,
     ]
 
-    # No context= here (plain CLI run)
+    # Stream dbt events into Dagster logs
     yield from dbt_cli.cli(cli_args).stream()
+
+    # Emit a dummy output so Dagster is satisfied
+    yield Output(value=None)
 
 defs = Definitions(
     assets=[fct_daily_sales_partitioned],
