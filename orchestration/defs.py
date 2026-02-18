@@ -4,7 +4,7 @@ from .resources import dbt_cli
 daily_partitions = DailyPartitionsDefinition(
     start_date="2026-02-15",
     timezone="Asia/Kolkata",
-    end_offset=1,
+    end_offset=1,  # include today’s partition
 )
 
 @asset(partitions_def=daily_partitions)
@@ -15,7 +15,7 @@ def fct_daily_sales_partitioned(context):
 
     context.log.info(f"Running dbt for window {min_date} -> {max_date}")
 
-    # Match the manual CLI vars format that you confirmed works
+    # vars string in the same format that worked in dbt Cloud
     vars_arg = f'{{min_date: "{min_date}", max_date: "{max_date}"}}'
 
     cli_args = [
@@ -26,8 +26,9 @@ def fct_daily_sales_partitioned(context):
 
     context.log.info(f"dbt CLI args: {cli_args}")
 
-    # Let dagster-dbt run dbt and stream logs
-    yield from dbt_cli.cli(cli_args, context=context).stream()
+    # IMPORTANT: no context= here, since this is NOT @dbt_assets
+    yield from dbt_cli.cli(cli_args).stream()
+
     yield Output(value=None)
 
 defs = Definitions(assets=[fct_daily_sales_partitioned])
