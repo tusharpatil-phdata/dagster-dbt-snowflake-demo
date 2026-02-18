@@ -1,7 +1,10 @@
 from dagster import Definitions, DailyPartitionsDefinition, asset, Output
 from .resources import dbt_cli
 
-daily_partitions = DailyPartitionsDefinition(start_date="2026-02-15", timezone="Asia/Kolkata",)
+daily_partitions = DailyPartitionsDefinition(start_date="2026-02-15", 
+                                             timezone="Asia/Kolkata",
+                                             end_offset=-1,
+                        )
 
 @asset(partitions_def=daily_partitions)
 def fct_daily_sales_partitioned(context):
