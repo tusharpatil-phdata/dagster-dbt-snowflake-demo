@@ -3,6 +3,7 @@ from .resources import dbt_cli
 
 daily_partitions = DailyPartitionsDefinition(start_date="2026-02-15", 
                                              timezone="Asia/Kolkata",
+                                             end_offset=-1,
                                         )
 
 @asset(partitions_def=daily_partitions)
